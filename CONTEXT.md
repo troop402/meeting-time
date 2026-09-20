@@ -6,9 +6,18 @@
 ---
 
 ## 1. Project Overview & URLs
-- **Repository:** `inarius/meeting-time` (GitHub)
-- **Live Deployment:** [https://inarius.github.io/meeting-time/](https://inarius.github.io/meeting-time/)
+- **Repository:** `inarius/meeting-time` (GitHub) — *in progress of transferring to the Troop GitHub Organization*
+- **Live Deployment:** [https://inarius.github.io/meeting-time/](https://inarius.github.io/meeting-time/) *(updates to `https://<org>.github.io/meeting-time/` post-transfer)*
 - **Core Principle:** **Zero-build, zero-server, single-file application**. The entire app runs directly in client browsers from a single [`index.html`](file:///workspaces/meeting-time/index.html) file hosted on GitHub Pages, accompanied only by standard PWA assets ([`site.webmanifest`](file:///workspaces/meeting-time/site.webmanifest) and app icons). No Node.js build steps, no webpack/vite bundles, no npm runtime dependencies, and no backend database.
+
+### Organization Transfer Checklist
+When transferring this repository to the Troop's GitHub Organization:
+1. **GitHub Pages Re-Enablement:** GitHub does NOT redirect Pages sites across account transfers. In the new Org repo, navigate to **Settings > Pages** and re-enable deployment from `main` branch root `/`.
+2. **Google Cast Developer Console (`1909D2D6`):** The Custom Web Receiver in https://cast.google.com/publish/ points to the live presentation URL (`https://inarius.github.io/meeting-time/?view=presentation`). Update the Receiver Application URL to the new org domain (`https://<org>.github.io/meeting-time/?view=presentation`) so TV casting does not 404.
+3. **Codespaces Access & Spending Limits:** Ensure the organization's **Settings > Codespaces** has member access enabled and appropriate spending limits configured.
+4. **Git Remote Update:** Existing local clones or active Codespaces should update their origin:
+   `git remote set-url origin https://github.com/<org>/meeting-time.git`
+5. **URL References:** Update live links in `README.md`, `CONTEXT.md`, and the contract header in `index.html`. The Cast namespace (`urn:x-cast:inarius.meetingtime`) is backwards-compatible and does not strictly require renaming unless desired.
 
 ---
 
