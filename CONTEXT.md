@@ -17,7 +17,7 @@
    *(Changes typically take 10-15 minutes to propagate across Google's Cast servers).*
 3. **Codespaces Access & Policies:** In organization settings (https://github.com/organizations/troop402/settings/codespaces), ensure member access is permitted and billing limits are active.
 4. **Git Remote URL:** Configured to `https://github.com/troop402/meeting-time.git`.
-5. **Backwards Compatibility:** The Cast namespace `urn:x-cast:inarius.meetingtime` remains unchanged to preserve continuous compatibility with the existing registered receiver profile.
+5. **Cast Namespace:** Configured to `urn:x-cast:troop402.meetingtime` across sender and receiver.
 
 ---
 
@@ -147,7 +147,7 @@ const APP_CONFIG = {
     },
     cast: {
         appId: '1909D2D6',       // Google Cast SDK Developer Console Custom Web Receiver Application ID
-        namespace: 'urn:x-cast:inarius.meetingtime',
+        namespace: 'urn:x-cast:troop402.meetingtime',
         maxInactivity: 10800     // Seconds (3 hours) of inactivity before receiver shuts down
     },
     history: {
