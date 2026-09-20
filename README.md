@@ -2,7 +2,7 @@
 
 A visual meeting timer and agenda display for Scout Troop meetings, Patrol Leaders' Council (PLC), and board meetings. It runs directly in the browser on a laptop, tablet, or phone, and can be projected or wirelessly cast to a TV to keep meetings running on time hands-free. Easy to share and collaborate with, no accounts or logins needed.
 
-👉 **Launch the App:** [https://inarius.github.io/meeting-time/](https://inarius.github.io/meeting-time/)
+👉 **Launch the App:** [https://troop402.github.io/meeting-time/](https://troop402.github.io/meeting-time/)
 
 ---
 
