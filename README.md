@@ -63,7 +63,7 @@ Keep a phone or laptop connected during the entire presentation. Enable Fullscre
 
 - The app monitors the real-world clock. When the time reaches the next scheduled item, the presentation advances.
 - Tap `[ ⏸ Pause ]`, `[ ◀ Prev ]`, `[ Next ▶ ]`, or click any item on the timeline to take manual control. Navigating will pause the display.
-- Press `[ > Resume ]` to continue automated playback.
+- Press `[ ▶ Resume ]` to continue automated playback.
 
 ---
 
