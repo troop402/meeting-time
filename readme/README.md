@@ -4,7 +4,7 @@
 
 A visual meeting timer and agenda display. Run as a website on a laptop, an app on a phone, or cast to a TV over WiFi hands-free. Easy to share and collaborate, no accounts or logins needed.
 
-![Presentation screen for this app](/screens/landscape_presentation.png)
+![Presentation screen for this app](https://troop402.github.io/meeting-time/screens/landscape_presentation.png)
 
 ---
 
@@ -15,7 +15,7 @@ The app has two stacked screens:
 - **Presentation View (Top Screen):** Main display shown to the room. It shows the current topic, live system clock, what's coming up next, and rotating announcements.
 - **Agenda Manager (Bottom Screen):** Scroll down to view the timeline, edit topics, manage announcements, and share the schedule.
 
-[![Management screen for this app](/screens/management_view_thumb.png)](/screens/management_view.png)
+[![Management screen for this app](https://troop402.github.io/meeting-time/screens/management_view_thumb.png)](https://troop402.github.io/meeting-time/screens/management_view.png)
 
 ---
 
