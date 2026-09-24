@@ -1,17 +1,21 @@
 # Meeting Time
 
-A visual meeting timer and agenda display for Scout Troop meetings, Patrol Leaders' Council (PLC), and board meetings. It runs directly in the browser on a laptop, tablet, or phone, and can be projected or wirelessly cast to a TV to keep meetings running on time hands-free. Easy to share and collaborate with, no accounts or logins needed.
+👉 **Launch it Here:** [https://troop402.github.io/meeting-time/](https://troop402.github.io/meeting-time/)
 
-👉 **Launch the App:** [https://troop402.github.io/meeting-time/](https://troop402.github.io/meeting-time/)
+A visual meeting timer and agenda display. Run as a website on a laptop, an app on a phone, or cast to a TV over WiFi hands-free. Easy to share and collaborate, no accounts or logins needed.
+
+![Presentation screen for this app](/screens/landscape_presentation.png)
 
 ---
 
 ## How It Works
 
-The app consists of two screens stacked vertically:
+The app has two stacked screens:
 
 - **Presentation View (Top Screen):** The big-screen display shown to the room. It displays the current topic, live system clock, notes, what's coming up next, and rotating announcements.
 - **Agenda Manager (Bottom Screen):** Scroll down to view the timeline, edit topics, manage announcements, and share the schedule.
+
+[![Management screen for this app](/screens/management_view_thumb.png)](/screens/management_view.png)
 
 ---
 
