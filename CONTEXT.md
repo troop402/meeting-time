@@ -110,6 +110,7 @@ Over hundreds of iterations, multiple AI coding sessions suffered from recurring
 
 ### 12. Agenda Distillation (Lesson Plan vs. Presentation Display)
 - **The Rule:** Long-form troop agenda documents contain detailed facilitator guides, instructor lists, advancement requirements, and setup protocols. When converting them for the app, distill them into high-level, presenter-friendly bullet points suitable for quick ambient scanning on a shared screen.
+- **Golden Format Reference:** See [`docs/agendas/2026-09-23-wood-tools-fire-building.txt`](file:///workspaces/meeting-time/docs/agendas/2026-09-23-wood-tools-fire-building.txt) for the standard troop format, including the regular `8:20 PM Advancements` slot (JASMs/Golden Eagles sign-offs on stage, ASMs conferences at fireplace), concise sub-bullet hierarchies, and untouched sister patrol pairings.
 
 ---
 
