@@ -233,25 +233,3 @@ When interacting with the user or modifying this codebase:
 4. **Never Force External Dependencies:** Do not recommend npm packages, node servers, or backend databases unless explicitly requested. Everything must remain self-contained in static client-side files.
 5. **Acknowledge Mobile Vibe Coding:** The user frequently codes from mobile devices and phone browsers. Keep solutions practical, clean, and easily testable on GitHub Pages.
 
----
-
-## 7. Future Architectural Explorations: Cloud Auto-Sync & Edge AI Proxy
-
-When transitioning from manual link/URL-hash sharing to automated live multi-device synchronization:
-
-### 1. The Auto-Sync Vision
-- **Current Pattern:** The meeting agenda is serialized and compressed into the URL hash (`#agenda=...`). Leaders must copy and distribute new links each week.
-- **Future Pattern:** A central lightweight cloud store holds the current meeting payload. When any phone or TV loads `https://troop402.github.io/meeting-time/`, it automatically fetches the latest active meeting without needing shared URL parameters. When the SPL/Scribe publishes an update, all connected screens re-sync automatically.
-
-### 2. Edge Proxy Architecture (Cloudflare Workers + KV/D1)
-- **Zero-Cost Edge Infrastructure:** Cloudflare Workers provides 100,000 free requests/day with sub-10ms startup (0 cold start vs. Render's 50s container sleep), coupled with Workers KV (100k free reads/day) or D1 (SQL at the edge).
-- **Public Read vs. Protected Write Security Model:**
-  - *Public Open-Source Frontend:* The frontend repository on GitHub is public. Therefore, the Worker URL itself is public.
-  - *Read Operations (GET /agenda):* Completely open. Anyone in the troop (parents, scouts, cabin TV kiosk) can fetch the current agenda with zero authentication.
-  - *Write Operations (POST /agenda):* Gated by a shared Leader Passcode/PIN (e.g. SPL/SM authorization header). The secret hash lives inside the Cloudflare Worker's private environment variables and is never committed to GitHub or exposed in browser source code.
-  - *Rate Limiting & Abuse Prevention:* Cloudflare edge rate limits (e.g. max 10 requests/min per IP) and optional Cloudflare Turnstile bot checks prevent unauthorized flooding or resource exhaustion.
-- **AI Proxy Integration (If Adopted):**
-  - Private API keys (e.g., Google Gemini 1.5 Flash) reside strictly in the Worker's environment secrets.
-  - The browser requests AI distillation via the Worker endpoint, which requires the Leader Passcode and enforces daily request caps before calling external LLM APIs.
-
-
