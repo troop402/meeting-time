@@ -87,8 +87,8 @@ Keep a phone or laptop connected during the entire presentation. Enable Fullscre
 ## Sample Agenda Text
 
 - **Formatting Notes:**
-  - Type `- ` for a bullet point.
-  - Type `-- ` for an indented sub-bullet.
+  - Type `-` for a bullet point.
+  - Type `--` for an indented sub-bullet.
   - Use `**bold**` or `*italics*` for emphasis.
 
 Use the `[ 📋 Import / Edit ]` feature to load an agenda. You can start with the sample agenda text below:
