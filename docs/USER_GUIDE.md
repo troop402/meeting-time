@@ -25,11 +25,11 @@ Running the board as an installed web app hides browser address bars and provide
 
 Before each meeting, the SPL or Scribe distributes the meeting link or raw agenda text.
 
-### Option A: 1-Tap Link Import (Fastest)
+### Option A: Shared Link Import
 1. Copy the shared meeting link (e.g. `https://troop402.github.io/meeting-time/#agenda=...`) from text message, email, or chat.
 2. Open the Meeting Board on your phone.
 3. Tap **📥 Import / Edit Raw** at the top.
-4. Tap **📋 Paste from Clipboard** (or paste the link into the box).
+4. Paste the link into the box and tap **Save to Agenda**.
 5. Confirm the prompt to import. The entire agenda, tabs, and meeting title will load immediately.
 
 ### Option B: Raw Text Import
@@ -132,3 +132,4 @@ The bulk importer reads simple plain text structured as follows:
 - Parent’s Meeting: Sep 27
 - Mount Lassen Campout: Oct 10-12
 ```
+

@@ -933,12 +933,7 @@
         <p style="font-size: 0.85rem; color: var(--pico-muted-color); margin-bottom: 8px;">
             Paste a shared meeting link (e.g. <code>https://...#agenda=...</code>) or edit the raw text format below:
         </p>
-        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
-            <button type="button" class="secondary outline" style="padding: 4px 10px; font-size: 0.8rem; margin-bottom: 0;" @click="pasteLinkFromClipboard()">
-                📋 Paste from Clipboard
-            </button>
-        </div>
-        <textarea x-model="importText" style="height: 38vh; min-height: 200px;" placeholder="Paste agenda raw text or a meeting share link here..."></textarea>
+        <textarea x-model="importText" style="height: 40vh; min-height: 200px;" placeholder="Paste agenda raw text or a meeting share link here..."></textarea>
         <footer style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px;">
             <button class="secondary" @click="$refs.importModal.close()">Cancel</button>
             <button class="primary" @click="processImportText()">Save to Agenda</button>
