@@ -216,7 +216,9 @@
             nowScale: 140,
             nextUpHeaderScale: 140,
             nextUpTitleScale: 130,
-            nextUpScale: 95
+            nextUpScale: 95,
+            agendaDuration: 40,
+            cardDuration: 20
         };
     </script>
     <!-- ========================================== -->
@@ -635,10 +637,11 @@
          
         <div class="presentation-controls-cluster" x-show="!isPresentationOnly">
             <button class="presentation-cast-btn" 
-                    x-show="isCasting"
+                    x-show="isCasting || isCastSuspended"
+                    :style="isCastSuspended ? 'border-color: #f59e0b; color: #f59e0b;' : ''"
                     @click.stop="handleCastButtonClick()"
-                    title="Manage active cast session"
-                    aria-label="Manage active cast session">
+                    :title="isCastSuspended ? 'Cast connection suspended (reconnecting...)' : 'Manage active cast session'"
+                    :aria-label="isCastSuspended ? 'Cast connection suspended (reconnecting...)' : 'Manage active cast session'">
                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2c4.97 0 9 4.03 9 9h2c0-6.08-4.92-11-11-11zm20-7H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
                 </svg>
@@ -743,13 +746,13 @@
             <div role="group" class="centered-button-group">
                 <button class="secondary" @click="shareAgendaURL()">🔗 Share</button>
                 <button class="secondary" @click="openImportModal()">📥 Import / Edit Raw</button>
-                <button :class="isCasting ? 'primary' : 'secondary'" 
+                <button :class="(isCasting || isCastSuspended) ? (isCastSuspended ? 'contrast outline' : 'primary') : 'secondary'" 
                         @click="handleCastButtonClick()" 
-                        :title="isCasting ? 'Manage active cast session' : 'Cast presentation to TV/Chromecast'">
+                        :title="(isCasting || isCastSuspended) ? (isCastSuspended ? 'Cast connection suspended (reconnecting...)' : 'Manage active cast session') : 'Cast presentation to TV/Chromecast'">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="vertical-align: -2px; display: inline-block;">
                         <path d="M1 18v3h3c0-1.66-1.34-3-3-3zm0-4v2c2.76 0 5 2.24 5 5h2c0-3.87-3.13-7-7-7zm0-4v2c4.97 0 9 4.03 9 9h2c0-6.08-4.92-11-11-11zm20-7H3c-1.1 0-2 .9-2 2v3h2V5h18v14h-7v2h7c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
                     </svg>
-                    <span x-text="isCasting ? 'Casting' : 'Cast'"></span>
+                    <span x-text="isCastSuspended ? 'Reconnecting...' : (isCasting ? 'Casting' : 'Cast')"></span>
                 </button>
             </div>
         </nav>
@@ -850,7 +853,32 @@
             </div>
             <button aria-label="Close" class="close" @click="$refs.castModal.close()" style="margin: 0; padding: 4px 8px;"></button>
         </header>
-        <template x-if="isCasting">
+        <template x-if="isCastSuspended">
+            <div>
+                <div style="background-color: var(--alert-bg); border: 1px solid var(--alert-border); color: var(--alert-txt); padding: 10px 14px; border-radius: 8px; margin-bottom: 14px; font-size: 0.85rem;">
+                    <strong>📡 Reconnecting to TV Presentation...</strong>
+                    <p style="margin: 4px 0 0 0; font-size: 0.8rem;">
+                        The presentation continues running autonomously on your TV screen. The phone control link is re-establishing.
+                    </p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px;">
+                    <button class="primary" @click="requestCastStatus(); handleAppWake();">
+                        ⚡ Retry TV Connection
+                    </button>
+                    <button class="secondary" @click="disconnectPhone()">
+                        🔌 Disconnect Phone (Keep TV Running)
+                    </button>
+                    <button style="background-color: #ef4444; border-color: #dc2626; color: white;" @click="stopCast()">
+                        🛑 Stop Casting
+                    </button>
+                    <button class="outline secondary" style="font-size: 0.8rem; padding: 6px; margin-top: 4px;" @click="copyKioskURL()">
+                        🔗 Copy Direct TV / Kiosk Link
+                    </button>
+                </div>
+            </div>
+        </template>
+
+        <template x-if="isCasting && !isCastSuspended">
             <div>
                 <p style="font-size: 0.85rem; color: var(--pico-muted-color); margin-bottom: 16px;">
                     Connected to TV. The presentation is running independently on your TV screen. You can disconnect your phone without stopping the display.
@@ -875,7 +903,7 @@
             </div>
         </template>
         
-        <template x-if="!isCasting">
+        <template x-if="!isCasting && !isCastSuspended">
             <div>
                 <p style="font-size: 0.85rem; color: var(--pico-muted-color); margin-bottom: 16px;">
                     Not currently connected to a TV screen.
@@ -898,12 +926,22 @@
 
 <dialog x-ref="importModal">
     <article style="max-width: 800px;">
-        <h3>Bulk Import / Edit Raw</h3>
-        <p>Edit the full raw text of the agenda and tabs below:</p>
-        <textarea x-model="importText" style="height: 40vh; min-height: 200px;" placeholder="..."></textarea>
-        <footer>
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <strong style="font-size: 1.1rem;">Bulk Import / Edit Raw</strong>
+            <button aria-label="Close" class="close" @click="$refs.importModal.close()" style="margin: 0; padding: 4px 8px;"></button>
+        </header>
+        <p style="font-size: 0.85rem; color: var(--pico-muted-color); margin-bottom: 8px;">
+            Paste a shared meeting link (e.g. <code>https://...#agenda=...</code>) or edit the raw text format below:
+        </p>
+        <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+            <button type="button" class="secondary outline" style="padding: 4px 10px; font-size: 0.8rem; margin-bottom: 0;" @click="pasteLinkFromClipboard()">
+                📋 Paste from Clipboard
+            </button>
+        </div>
+        <textarea x-model="importText" style="height: 38vh; min-height: 200px;" placeholder="Paste agenda raw text or a meeting share link here..."></textarea>
+        <footer style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px;">
             <button class="secondary" @click="$refs.importModal.close()">Cancel</button>
-            <button class="primary" @click="processImportText(); $refs.importModal.close()">Save to Agenda</button>
+            <button class="primary" @click="processImportText()">Save to Agenda</button>
         </footer>
     </article>
 </dialog>
@@ -945,6 +983,17 @@
                 <label style="font-size: 0.75rem; margin-bottom: 0;">Next Up Title: <strong x-text="proto.nextUpTitleScale + '%'"></strong>
                     <input type="range" min="70" max="160" step="1" x-model.number="proto.nextUpTitleScale" @input="applyProtoStyles()">
                 </label>
+
+                <div style="height: 1px; background: var(--pico-muted-border-color); margin: 6px 0;"></div>
+                <div style="font-weight: 600; font-size: 0.8rem; color: var(--pico-color);">⏱️ Side-Tab Rotation Intervals</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                    <label style="font-size: 0.75rem; margin-bottom: 0;">Main Agenda: <strong x-text="(proto.agendaDuration || 40) + 's'"></strong>
+                        <input type="range" min="5" max="120" step="5" x-model.number="proto.agendaDuration" @input="applyProtoStyles()">
+                    </label>
+                    <label style="font-size: 0.75rem; margin-bottom: 0;">Side Cards: <strong x-text="(proto.cardDuration || 20) + 's'"></strong>
+                        <input type="range" min="5" max="90" step="5" x-model.number="proto.cardDuration" @input="applyProtoStyles()">
+                    </label>
+                </div>
 
                 <div style="display: flex; gap: 8px; margin-top: 6px;">
                     <button type="button" class="secondary outline" style="flex: 1; padding: 4px 8px; font-size: 0.75rem;" @click="resetProtoToDefaults()">Reset Defaults</button>
@@ -1005,6 +1054,9 @@ window.__onGCastApiAvailable = function(isAvailable) {
                     if (event.sessionState === cast.framework.SessionState.SESSION_STARTED ||
                         event.sessionState === cast.framework.SessionState.SESSION_RESUMED) {
                         app.isCasting = true;
+                        app.isCastSuspended = false;
+                        app.castStatusText = '';
+                        localStorage.setItem('has_active_cast', 'true');
 
                         // Listen for TV messages on custom namespace
                         const session = castContext.getCurrentSession();
@@ -1026,7 +1078,7 @@ window.__onGCastApiAvailable = function(isAvailable) {
                                event.sessionState === cast.framework.SessionState.NO_SESSION) {
                         app.handleCastDisconnected(true);
                     } else if (event.sessionState === cast.framework.SessionState.SESSION_SUSPENDED) {
-                        app.handleCastDisconnected(false);
+                        app.handleCastSuspended();
                     }
                 }
             );
@@ -1074,11 +1126,13 @@ function meetingApp() {
         editingMode: 'agenda', 
         currentEditTabId: null, 
 
-        /* Cast State (W3C Presentation API) */
+        /* Cast State (Google Cast SDK & W3C Presentation API) */
         isCastSupported: false,
         isCastAvailable: false,
         castConnection: null,
         isCasting: false,
+        isCastSuspended: false,
+        castStatusText: '',
         hasReceivedCastState: false,
         presentationRequest: null,
         isPresentationOnly: false,
@@ -1151,9 +1205,11 @@ function meetingApp() {
                 detailsScale: `${this.proto.detailsScale || 100}%`,
                 nowScale: `${this.proto.nowScale || 140}%`,
                 nextUpHeaderScale: `${this.proto.nextUpHeaderScale || 140}%`,
-                nextUpTitleScale: `${this.proto.nextUpTitleScale || 130}%`
+                nextUpTitleScale: `${this.proto.nextUpTitleScale || 130}%`,
+                agendaDuration: `${this.proto.agendaDuration || 40}s`,
+                cardDuration: `${this.proto.cardDuration || 20}s`
             }, null, 2);
-            this.copyToClipboard(summary, "Scale settings copied to clipboard!\n\n" + summary);
+            this.copyToClipboard(summary, "Prototyper & timing settings copied to clipboard!\n\n" + summary);
         },
 
         copyToClipboard(text, successMsg) {
@@ -1169,7 +1225,7 @@ function meetingApp() {
         get nextTabTarget() { return this.displaySequence.length > 1 ? this.displaySequence[(this.displayIndex + 1) % this.displaySequence.length] : null; },
         
         get currentCycleDuration() { 
-            return this.isFastMode ? APP_CONFIG.timing.debugDuration : (this.activeTabId === null ? APP_CONFIG.timing.agendaDuration : APP_CONFIG.timing.cardDuration); 
+            return this.isFastMode ? APP_CONFIG.timing.debugDuration : (this.activeTabId === null ? (this.proto.agendaDuration || APP_CONFIG.timing.agendaDuration) : (this.proto.cardDuration || APP_CONFIG.timing.cardDuration)); 
         },
 
         getTabProgressStyle(tabId) {
@@ -1246,6 +1302,9 @@ function meetingApp() {
                     const session = cast.framework.CastContext.getInstance().getCurrentSession();
                     if (session) {
                         this.isCasting = true;
+                        this.isCastSuspended = false;
+                        this.castStatusText = '';
+                        localStorage.setItem('has_active_cast', 'true');
                         this.attachSenderCastListener(session);
                         this.requestCastStatus();
                     }
@@ -1303,9 +1362,16 @@ function meetingApp() {
                 }
             });
 
-            // Network offline listener: immediately drop casting state
+            // Network offline listener: mark cast suspended rather than wiping
             window.addEventListener('offline', () => {
-                this.handleCastDisconnected(false);
+                if (this.isCasting) {
+                    this.handleCastSuspended();
+                }
+            });
+
+            // Network online listener: trigger wake check to auto-reconnect
+            window.addEventListener('online', async () => {
+                await this.handleAppWake();
             });
 
             // Silent Auto-Rejoin and health check on wake
@@ -1842,6 +1908,69 @@ function meetingApp() {
             this.triggerTwemojiParse();
         },
 
+        async unpackCompressedAgenda(tokenOrUrl) {
+            try {
+                if (!tokenOrUrl) return null;
+                let token = tokenOrUrl.trim();
+                if (token.includes('#agenda=')) {
+                    token = token.split('#agenda=')[1].split('&')[0];
+                } else if (token.includes('agenda=')) {
+                    token = token.split('agenda=')[1].split('&')[0];
+                }
+                let base64 = token.replace(/-/g, '+').replace(/_/g, '/');
+                while (base64.length % 4) base64 += '=';
+                const binary = atob(base64); const bytes = new Uint8Array(binary.length);
+                for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+                const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+                const minified = JSON.parse(await new Response(stream).text());
+                return minified;
+            } catch (e) {
+                console.warn("unpackCompressedAgenda error:", e);
+                return null;
+            }
+        },
+
+        async applyUnpackedAgenda(minified) {
+            if (!minified) return false;
+            if (minified.m !== undefined) { 
+                this.meetingTitle = minified.m; 
+                this.updateTitle(); 
+            }
+            if (minified.t && Array.isArray(minified.t)) {
+                minified.t.forEach((tData, i) => {
+                    if (this.tabs[i]) { 
+                        this.tabs[i].enabled = !!tData[0]; 
+                        this.tabs[i].content = tData[1] || ''; 
+                        if (tData[2]) this.tabs[i].title = tData[2];
+                    }
+                });
+            }
+            const decoded = (minified.items || minified).map(item => ({ time: item[0], title: item[1], details: item[2] }));
+            if (Array.isArray(decoded) && decoded.length) {
+                this.historyStack = [];
+                this.agenda = decoded;
+                this.currentIndex = 0;
+                this.editingMode = 'agenda';
+                this.commitAgendaChanges(true);
+                return true;
+            }
+            return false;
+        },
+
+        async pasteLinkFromClipboard() {
+            try {
+                const text = await navigator.clipboard.readText();
+                if (text && text.trim()) {
+                    this.importText = text.trim();
+                    if (this.importText.includes('#agenda=') || this.importText.includes('agenda=')) {
+                        await this.processImportText();
+                    }
+                }
+            } catch (err) {
+                alert("Clipboard access was blocked or not allowed. Please paste the link manually into the box.");
+            }
+        },
+
         async loadInitialAgenda() {
             this.meetingTitle = localStorage.getItem(APP_CONFIG.storage.titleKey) || "August 19, 2026"; this.updateTitle();
             const urlParams = new URLSearchParams(window.location.search);
@@ -1849,15 +1978,10 @@ function meetingApp() {
             const hasHashAgenda = window.location.hash.startsWith('#agenda=');
 
             if (hasHashAgenda || queryAgenda) {
-                try {
-                    let base64 = (queryAgenda || window.location.hash.replace('#agenda=', '')).replace(/-/g, '+').replace(/_/g, '/');
-                    while (base64.length % 4) base64 += '=';
-                    const binary = atob(base64); const bytes = new Uint8Array(binary.length);
-                    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-                    const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
-                    const minified = JSON.parse(await new Response(stream).text());
+                const token = queryAgenda || window.location.hash;
+                const minified = await this.unpackCompressedAgenda(token);
+                if (minified) {
                     if (minified.m !== undefined) { this.meetingTitle = minified.m; this.updateTitle(); }
-                    
                     if (minified.t && Array.isArray(minified.t)) {
                         minified.t.forEach((tData, i) => {
                             if (this.tabs[i]) { 
@@ -1867,10 +1991,12 @@ function meetingApp() {
                             }
                         });
                     }
-                    
                     const decoded = (minified.items || minified).map(item => ({ time: item[0], title: item[1], details: item[2] }));
-                    if (Array.isArray(decoded) && decoded.length) { localStorage.setItem(APP_CONFIG.storage.agendaKey, JSON.stringify(decoded)); return decoded; }
-                } catch (e) {}
+                    if (Array.isArray(decoded) && decoded.length) { 
+                        localStorage.setItem(APP_CONFIG.storage.agendaKey, JSON.stringify(decoded)); 
+                        return decoded; 
+                    }
+                }
             }
             const stored = localStorage.getItem(APP_CONFIG.storage.agendaKey);
             const storedTabs = localStorage.getItem(APP_CONFIG.storage.tabsKey);
@@ -1879,8 +2005,25 @@ function meetingApp() {
             return JSON.parse(JSON.stringify(APP_CONFIG.seedAgenda));
         },
 
-        processImportText() {
-            if (!this.importText.trim() || !confirm("Warning: Importing text will replace all existing agenda items. Continue?")) return;
+        async processImportText() {
+            const raw = this.importText.trim();
+            if (!raw) return;
+
+            // Check if user pasted a share link or agenda token
+            if (raw.includes('#agenda=') || raw.includes('agenda=') || (raw.startsWith('http') && raw.includes('='))) {
+                if (!confirm("Detected a meeting share link. Import agenda from this link?")) return;
+                const minified = await this.unpackCompressedAgenda(raw);
+                if (minified && await this.applyUnpackedAgenda(minified)) {
+                    this.importText = '';
+                    if (this.$refs.importModal) this.$refs.importModal.close();
+                    return;
+                } else {
+                    alert("Could not decode meeting data from this link.");
+                    return;
+                }
+            }
+
+            if (!confirm("Warning: Importing text will replace all existing agenda items. Continue?")) return;
             
             const parts = this.importText.split(/===\s*TABS\s*===/i);
             const agendaPart = parts[0].trim();
@@ -1932,6 +2075,7 @@ function meetingApp() {
                 this.agenda = newAgenda; this.currentIndex = 0; this.editingMode = 'agenda';
                 this.commitAgendaChanges(true);
                 this.importText = '';
+                if (this.$refs.importModal) this.$refs.importModal.close();
             } else alert("Could not parse time indexes.");
         },
         
@@ -2155,8 +2299,15 @@ function meetingApp() {
             }
         },
 
+        handleCastSuspended() {
+            this.isCastSuspended = true;
+            this.castStatusText = 'Reconnecting...';
+        },
+
         handleCastDisconnected(purge = false) {
             this.isCasting = false;
+            this.isCastSuspended = false;
+            this.castStatusText = '';
             this.castConnection = null;
             if (this._probeTimeout) {
                 clearTimeout(this._probeTimeout);
@@ -2164,18 +2315,23 @@ function meetingApp() {
             }
             if (purge) {
                 localStorage.removeItem(APP_CONFIG.storage.castSessionKey);
+                localStorage.removeItem('has_active_cast');
             }
         },
 
         async handleAppWake() {
+            const hadActiveCast = localStorage.getItem('has_active_cast') === 'true';
             const savedId = localStorage.getItem(APP_CONFIG.storage.castSessionKey);
             
-            if (this.isCasting || savedId) {
+            if (this.isCasting || this.isCastSuspended || hadActiveCast || savedId) {
+                this.isCastSuspended = true;
+                this.castStatusText = 'Reconnecting...';
+
                 if (this._probeTimeout) clearTimeout(this._probeTimeout);
                 this._probeTimeout = setTimeout(() => {
                     console.log("Cast wake probe timed out (TV unreachable or off). Dropping cast state.");
                     this.handleCastDisconnected(true);
-                }, 3000);
+                }, 8000);
 
                 // Priority 1: Check Google Cast SDK session
                 if (window.cast && cast.framework && cast.framework.CastContext) {
@@ -2183,6 +2339,9 @@ function meetingApp() {
                         const session = cast.framework.CastContext.getInstance().getCurrentSession();
                         if (session) {
                             this.isCasting = true;
+                            this.isCastSuspended = false;
+                            this.castStatusText = '';
+                            localStorage.setItem('has_active_cast', 'true');
                             this.attachSenderCastListener(session);
                             this.requestCastStatus();
                             return;
@@ -2200,7 +2359,7 @@ function meetingApp() {
                         console.log("Presentation reconnect failed:", e);
                         this.handleCastDisconnected(true);
                     }
-                } else if (!this.isCasting) {
+                } else if (!this.isCasting && !hadActiveCast) {
                     this.handleCastDisconnected(true);
                 }
             } else {
@@ -2283,6 +2442,9 @@ function meetingApp() {
                 this._probeTimeout = null;
             }
             this.isCasting = true;
+            this.isCastSuspended = false;
+            this.castStatusText = '';
+            localStorage.setItem('has_active_cast', 'true');
             if (typeof data.index === 'number' && data.index >= 0 && data.index < this.agenda.length) {
                 this.currentIndex = data.index;
             }
@@ -2373,6 +2535,11 @@ function meetingApp() {
         setupCastConnection(conn, isReconnect = false) {
             this.castConnection = conn;
             this.isCasting = (conn.state === 'connected');
+            if (this.isCasting) {
+                this.isCastSuspended = false;
+                this.castStatusText = '';
+                localStorage.setItem('has_active_cast', 'true');
+            }
             if (conn.id) localStorage.setItem(APP_CONFIG.storage.castSessionKey, conn.id);
 
             conn.onmessage = (event) => {
@@ -2395,6 +2562,9 @@ function meetingApp() {
             conn.onconnect = () => {
                 this.castConnection = conn;
                 this.isCasting = true;
+                this.isCastSuspended = false;
+                this.castStatusText = '';
+                localStorage.setItem('has_active_cast', 'true');
                 if (isReconnect) {
                     this.requestCastStatus();
                 } else {
@@ -2402,7 +2572,7 @@ function meetingApp() {
                 }
             };
             conn.onclose = () => {
-                this.handleCastDisconnected(false);
+                this.handleCastSuspended();
             };
             conn.onterminate = () => {
                 this.handleCastDisconnected(true);
@@ -2410,7 +2580,7 @@ function meetingApp() {
         },
 
         async handleCastButtonClick() {
-            if (this.isCasting) {
+            if (this.isCasting || this.isCastSuspended) {
                 if (this.$refs.castModal) this.$refs.castModal.showModal();
                 return;
             }
@@ -2421,6 +2591,9 @@ function meetingApp() {
                     const castContext = cast.framework.CastContext.getInstance();
                     await castContext.requestSession();
                     this.isCasting = true;
+                    this.isCastSuspended = false;
+                    this.castStatusText = '';
+                    localStorage.setItem('has_active_cast', 'true');
                     this.sendStateToCast();
                     return;
                 } catch (err) {
@@ -2471,7 +2644,7 @@ function meetingApp() {
                 } catch(e) {}
                 this.castConnection = null;
             }
-            this.handleCastDisconnected(terminateReceiver);
+            this.handleCastDisconnected(true);
             if (this.$refs.castModal) this.$refs.castModal.close();
         },
 

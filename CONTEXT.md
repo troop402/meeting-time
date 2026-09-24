@@ -112,6 +112,15 @@ Over hundreds of iterations, multiple AI coding sessions suffered from recurring
 - **The Rule:** Long-form troop agenda documents contain detailed facilitator guides, instructor lists, advancement requirements, and setup protocols. When converting them for the app, distill them into high-level, presenter-friendly bullet points suitable for quick ambient scanning on a shared screen.
 - **Golden Format Reference:** See [`docs/agendas/2026-09-23-wood-tools-fire-building.txt`](file:///workspaces/meeting-time/docs/agendas/2026-09-23-wood-tools-fire-building.txt) for the standard troop format, including the regular `8:20 PM Advancements` slot (JASMs/Golden Eagles sign-offs on stage, ASMs conferences at fireplace), concise sub-bullet hierarchies, and untouched sister patrol pairings.
 
+### 13. Cast Disconnection, Suspension & Auto-Rejoin Lifecycle
+- **The Problem:** When mobile senders sleep or screen-lock, the Google Cast SDK fires `SESSION_SUSPENDED`. If this is treated as a permanent disconnect, the phone wipes its session state and fails to check `castContext.getCurrentSession()` on wake.
+- **The Rule:** `SESSION_SUSPENDED` sets `isCastSuspended = true` and updates the UI button to `[ 📡 Reconnecting... ]`. Persistent cast intent is recorded via `localStorage.setItem('has_active_cast', 'true')`. On `visibilitychange` (wake) or `online`, the app probes for the active Cast SDK session with an 8-second timeout (accommodating mobile Wi-Fi radio wake latency) and immediately requests status from the TV (`REQUEST_STATUS`).
+- **Autonomous TV Playback:** If the phone is left unattended or disconnected, the TV continues cycling independently. Only explicit termination (`🛑 Stop Casting`) closes the receiver.
+
+### 14. iOS WebClip Sandbox Isolation & Direct Link Import
+- **The Problem:** Apple isolates Home Screen WebClips (standalone PWAs) in a private WebKit sandbox that cannot access Safari's `localStorage`. Furthermore, when `start_url` in `site.webmanifest` is an absolute path (`/meeting-time/`), creating a home screen icon strips any URL hash fragment (`#agenda=...`), causing the app to open with default empty data.
+- **The Rule:** The "Bulk Import / Edit Raw" modal provides direct link importing via `unpackCompressedAgenda(tokenOrUrl)` and a `[ 📋 Paste from Clipboard ]` button. Users can copy a shared agenda link from text/email and paste it straight into the modal to unpack the compressed payload into local storage.
+
 ---
 
 ## 4. Technical Architecture & Tech Stack
@@ -192,10 +201,12 @@ The app is currently configured with the **Harmonic Proportional** base profile 
   "nowScale": "140%",
   "nextUpHeaderScale": "140%",
   "nextUpTitleScale": "130%",
+  "agendaDuration": "40s",
+  "cardDuration": "20s",
   "mgmtContinuity": true
 }
 ```
-- **CSS Custom Properties on `:root`**:
+- **CSS Custom Properties & Config State**:
   - `--proto-scale`: `1.0` (Global scale factor)
   - `--proto-left-col`: `35%` (Left column width in landscape grid)
   - `--proto-title-scale`: `0.95` (Title heading size multiplier)
@@ -204,6 +215,8 @@ The app is currently configured with the **Harmonic Proportional** base profile 
   - `--proto-nextup-header-scale`: `1.4` (Next Up header and time multiplier)
   - `--proto-nextup-title-scale`: `1.3` (Next Up title text multiplier)
   - `--proto-nextup-scale`: `0.95` (Legacy Next Up card multiplier)
+  - `proto.agendaDuration`: `40` (Seconds the main agenda displays during rotation)
+  - `proto.cardDuration`: `20` (Seconds each side-tab card displays during rotation)
 - **Management View Continuity (`body.proto-mgmt-continuity`)**: Active by default. Aligns Management View column width, card borders, and timeline row font sizing with the presentation styling.
 - **Dynamic Text Pagination**: `renderPresentationTextPages()` uses computed style font sizing and line height to guarantee accurate page splits across all scales.
 - **Live TV Synchronization over Cast**: When actively connected to a TV (`isCasting`), slider adjustments and default resets stream to the cast receiver in real-time (`SET_PROTO` with a 50ms trailing debounce) and are bundled into `SYNC_STATE`. This allows hands-on tuning of TV presentation typography and layout directly from a phone controller.
