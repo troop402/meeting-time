@@ -4,7 +4,7 @@
 
 A visual meeting timer and agenda display. Run as a website on a laptop, an app on a phone, or cast to a TV over WiFi hands-free. Easy to share and collaborate, no accounts or logins needed.
 
-![Presentation screen for this app](/screens/landscape_presentation.png)
+![Presentation screen for this app](/screens/presentation_video.webp)
 
 ---
 
