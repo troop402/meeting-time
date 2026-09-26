@@ -95,6 +95,12 @@
     - Remote Side-Tab Control: Clicking "Agenda" tab normalizes to null/agenda, cleanly clears visibleTabs via array mutation and DOM cleanup, and signals the TV receiver to collapse any active sidecards back to agenda milestone details.
     - Autonomous Receiver: Receiver URLs (`?view=presentation&autoplay=1#agenda=...`) run autonomously on their own local wall clock without requiring an active sender.
     - Controller Lifecycle: Disconnecting the phone session detaches the controller without terminating the TV presentation. Explicit stop commands receiver termination.
+
+    11. ASSETS, DOCUMENTATION & HOSTING HYGIENE
+    - Asset Subfolder: PWA icons and web manifest reside in `assets/`. `assets/site.webmanifest` MUST use `"start_url": "../"` and `"scope": "../"` to preserve app root launching when installed as a PWA.
+    - Single Source of Truth Documentation: Root `README.md` is the canonical documentation. Standalone User Guide at `guide/index.html` dynamically fetches root `README.md` with cache-busting timestamp parameters (`?_=${Date.now()}` and `cache: 'no-store'`) to bypass mobile WebKit/PWA and CDN caching.
+    - In-App Guide Links: The Management View footer provides direct access to `guide/`, and the Import dialog provides a direct link to `guide/#sample-agenda-text`.
+    - Public Hosting Exclusions: `_config.yml` excludes internal developer documents (`CONTEXT.md`, `docs/`) from public GitHub Pages deployment.
 ========================================== -->
     
     <!-- Link to the GitHub Pages specific manifest and icon paths -->

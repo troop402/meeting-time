@@ -8,7 +8,8 @@
 ## 1. Project Overview & URLs
 - **Repository:** `troop402/meeting-time` (GitHub)
 - **Live Deployment:** [https://troop402.github.io/meeting-time/](https://troop402.github.io/meeting-time/)
-- **Core Principle:** **Zero-build, zero-server, single-file application**. The entire app runs directly in client browsers from a single [`index.html`](file:///workspaces/meeting-time/index.html) file hosted on GitHub Pages, accompanied only by standard PWA assets ([`site.webmanifest`](file:///workspaces/meeting-time/site.webmanifest) and app icons). No Node.js build steps, no webpack/vite bundles, no npm runtime dependencies, and no backend database.
+- **User Guide:** [https://troop402.github.io/meeting-time/guide/](https://troop402.github.io/meeting-time/guide/)
+- **Core Principle:** **Zero-build, zero-server, static web application**. The entire application runs directly in client browsers from a single [`index.html`](file:///workspaces/meeting-time/index.html) file hosted on GitHub Pages, accompanied by organized assets in [`assets/`](file:///workspaces/meeting-time/assets/) ([`assets/site.webmanifest`](file:///workspaces/meeting-time/assets/site.webmanifest) and app icons), and an interactive documentation guide in [`guide/index.html`](file:///workspaces/meeting-time/guide/index.html). No Node.js build steps, no webpack/vite bundles, no npm runtime dependencies, and no backend database. Sensitive planning files and developer notes are excluded from public hosting via [`_config.yml`](file:///workspaces/meeting-time/_config.yml).
 
 ### Organization Transfer Checklist (Troop 402)
 1. **GitHub Pages Re-Enablement:** In https://github.com/troop402/meeting-time/settings/pages, ensure GitHub Pages is enabled (Source: `Deploy from a branch`, Branch: `main`, Folder: `/ (root)`).
@@ -120,6 +121,26 @@ Over hundreds of iterations, multiple AI coding sessions suffered from recurring
 ### 14. iOS WebClip Sandbox Isolation & Direct Link Import
 - **The Problem:** Apple isolates Home Screen WebClips (standalone PWAs) in a private WebKit sandbox that cannot access Safari's `localStorage`. Furthermore, when `start_url` in `site.webmanifest` is an absolute path (`/meeting-time/`), creating a home screen icon strips any URL hash fragment (`#agenda=...`), causing the app to open with default empty data.
 - **The Rule:** The "Bulk Import / Edit Raw" modal provides direct link importing via `unpackCompressedAgenda(tokenOrUrl)` and a `[ 📋 Paste from Clipboard ]` button. Users can copy a shared agenda link from text/email and paste it straight into the modal to unpack the compressed payload into local storage.
+
+### 15. Asset Subfolder Organization & PWA Scope Integrity
+- **The Problem:** Placing PWA icons and web manifests in a subfolder (`assets/`) can break PWA scoping and launch behavior if `start_url` and `scope` are left relative to the subfolder or set as absolute paths.
+- **The Rule:** All icons and the web manifest reside in [`assets/`](file:///workspaces/meeting-time/assets/). In [`assets/site.webmanifest`](file:///workspaces/meeting-time/assets/site.webmanifest), `start_url` and `scope` MUST be explicitly set to `"../"`. This guarantees that installing the PWA from any browser scopes the application directly to the repository root.
+
+### 16. Single Source of Truth Documentation & Standalone User Guide (`guide/`)
+- **The Problem:** Maintaining documentation across multiple files (such as duplicating `README.md` into `readme/README.md` or building static HTML during CI) introduces synchronization drift and couples the project to build pipelines. Furthermore, GitHub Pages deprecated and rejects Git symlinks since February 2023.
+- **The Rule:** The root [`README.md`](file:///workspaces/meeting-time/README.md) is the sole canonical source of truth for app documentation. A zero-build, standalone webpage at [`guide/index.html`](file:///workspaces/meeting-time/guide/index.html) (accessible at `https://troop402.github.io/meeting-time/guide/`) dynamically fetches `../README.md` client-side using `marked.js` and Pico CSS.
+- **Cache-Busting Requirement:** To prevent mobile WebKit/PWAs and GitHub Pages Fastly CDN (which sets `Cache-Control: max-age=600`) from serving stale documentation after updates, `guide/index.html` MUST append a millisecond timestamp (`?_=${Date.now()}`) and specify `{ cache: 'no-store' }` on fetch.
+- **Markdown Rewriting & Usability:** During client-side parsing, relative image paths (`/screens/` or `screens/`) are mapped to `../screens/`, intra-doc anchor links (`README.md#...`) are normalized to `#...`, and code blocks are given an interactive `Copy` button.
+
+### 17. Public Hosting Exclusions (`_config.yml`)
+- **The Problem:** By default, GitHub Pages publishes all markdown and repository files, inadvertently exposing internal planning artifacts, developer notes, or agenda working documents to public URLs.
+- **The Rule:** A root [`_config.yml`](file:///workspaces/meeting-time/_config.yml) file is maintained with Jekyll exclusions for internal documents:
+  ```yaml
+  exclude:
+    - CONTEXT.md
+    - docs/plans/
+    - docs/agendas/
+  ```
 
 ---
 
