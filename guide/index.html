@@ -127,18 +127,11 @@
 
         .code-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-end;
             align-items: center;
-            padding: 8px 14px;
+            padding: 6px 12px;
             background-color: var(--pico-table-border-color);
             border-bottom: 1px solid var(--pico-muted-border-color);
-            font-size: 0.8rem;
-        }
-
-        .code-title {
-            color: var(--pico-muted-color);
-            font-weight: 600;
-            font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
         }
 
         .code-copy-btn {
@@ -336,11 +329,8 @@
                 const code = pre.querySelector('code');
                 const rawText = code ? code.innerText : pre.innerText;
 
-                // Identify if this is the sample agenda text block
-                const isAgenda = rawText.includes('🦉') || rawText.includes('=== TABS ===') || rawText.includes('Meeting Set Up');
-                const titleText = isAgenda ? '📋 Sample Agenda Text' : '💻 Code / Text';
-                const buttonLabel = isAgenda ? '📋 Copy Agenda Text' : '📋 Copy Text';
-                const successLabel = isAgenda ? '✅ Agenda Copied!' : '✅ Copied!';
+                const buttonLabel = 'Copy';
+                const successLabel = 'Copied!';
 
                 // Create wrapper container
                 const wrapper = document.createElement('div');
@@ -350,20 +340,15 @@
                 const header = document.createElement('div');
                 header.className = 'code-header';
 
-                const title = document.createElement('span');
-                title.className = 'code-title';
-                title.textContent = titleText;
-
                 const copyBtn = document.createElement('button');
                 copyBtn.type = 'button';
                 copyBtn.className = 'code-copy-btn';
                 copyBtn.textContent = buttonLabel;
-                copyBtn.setAttribute('aria-label', `Copy ${titleText}`);
+                copyBtn.setAttribute('aria-label', 'Copy to clipboard');
                 copyBtn.addEventListener('click', () => {
                     copyToClipboard(rawText, copyBtn, buttonLabel, successLabel);
                 });
 
-                header.appendChild(title);
                 header.appendChild(copyBtn);
 
                 // Insert wrapper into DOM
