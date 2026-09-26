@@ -62,26 +62,18 @@
         /* Main Content Container */
         .guide-container {
             max-width: var(--guide-max-width);
-            margin: 2rem auto 3rem auto;
-            padding: 0 1rem;
+            margin: 1.5rem auto 3rem auto;
+            padding: 0 1.25rem;
             flex-grow: 1;
             width: 100%;
         }
 
-        .guide-card {
-            background-color: var(--pico-card-background-color);
-            border: 1px solid var(--pico-muted-border-color);
-            border-radius: 12px;
-            padding: 2.25rem 2rem;
-            box-shadow: var(--pico-card-box-shadow);
-        }
-
         @media (max-width: 600px) {
-            .guide-card {
-                padding: 1.25rem 1rem;
+            .guide-container {
+                padding: 0 1rem;
             }
             .guide-actions-bar {
-                margin-bottom: 1rem;
+                margin-bottom: 0.75rem;
             }
         }
 
@@ -188,21 +180,19 @@
 
     <!-- Main Content Area -->
     <main class="guide-container">
-        <article class="guide-card">
-            <div class="guide-actions-bar">
-                <button id="share-btn" class="secondary outline header-btn" onclick="copyShareLink(this)">
-                    🔗 Share Guide
-                </button>
-                <button id="theme-toggle-btn" class="secondary outline header-btn" onclick="toggleTheme()">
-                    ☀️ Light
-                </button>
+        <div class="guide-actions-bar">
+            <button id="share-btn" class="secondary outline header-btn" onclick="copyShareLink(this)">
+                🔗 Share Guide
+            </button>
+            <button id="theme-toggle-btn" class="secondary outline header-btn" onclick="toggleTheme()">
+                ☀️ Light
+            </button>
+        </div>
+        <div id="readme-content">
+            <div class="loading-state">
+                <p aria-busy="true">Loading User Guide...</p>
             </div>
-            <div id="readme-content">
-                <div class="loading-state">
-                    <p aria-busy="true">Loading User Guide...</p>
-                </div>
-            </div>
-        </article>
+        </div>
     </main>
 
     <script>
