@@ -97,12 +97,12 @@
     - Controller Lifecycle: Disconnecting the phone session detaches the controller without terminating the TV presentation. Explicit stop commands receiver termination.
 ========================================== -->
     
-    <!-- Link to the GitHub Pages specific manifest path -->
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="icon" href="favicon.ico">
-    <link rel="manifest" href="site.webmanifest">
+    <!-- Link to the GitHub Pages specific manifest and icon paths -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+    <link rel="shortcut icon" href="assets/favicon.ico">
+    <link rel="manifest" href="assets/site.webmanifest">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -836,6 +836,7 @@
             
             <div class="timestamp-text" style="padding-top: 4px;">
                 <span x-show="lastUpdatedText">Updated: <span x-text="lastUpdatedText"></span> &bull; </span>
+                <a href="guide/" class="debug-link" title="Open User Guide">📖 User Guide</a> &bull;
                 <a href="#" class="debug-link" @click.prevent="$refs.debugModal.showModal()">⚙️ Debug</a>
             </div>
         </div>
@@ -931,7 +932,7 @@
             <button aria-label="Close" class="close" @click="$refs.importModal.close()" style="margin: 0; padding: 4px 8px;"></button>
         </header>
         <p style="font-size: 0.85rem; color: var(--pico-muted-color); margin-bottom: 8px;">
-            Paste a shared meeting link (e.g. <code>https://...#agenda=...</code>) or edit the raw text format below:
+            Paste a shared meeting link (e.g. <code>https://...#agenda=...</code>) or edit the raw text format below (<a href="guide/#sample-agenda-text" target="_blank" style="color: var(--pico-primary);">see sample agenda in User Guide</a>):
         </p>
         <textarea x-model="importText" style="height: 40vh; min-height: 200px;" placeholder="Paste agenda raw text or a meeting share link here..."></textarea>
         <footer style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 10px;">

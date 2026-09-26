@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Time — User Guide</title>
+
+    <!-- App Assets & PWA Metadata -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicon-16x16.png">
+    <link rel="shortcut icon" href="../assets/favicon.ico">
+    <link rel="manifest" href="../assets/site.webmanifest">
+
+    <!-- Pico CSS Framework -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
+    <!-- Marked Markdown Parser -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        :root {
+            --guide-max-width: 860px;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Fixed / Sticky Header */
+        .guide-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--pico-background-color);
+            border-bottom: 1px solid var(--pico-muted-border-color);
+            padding: 0.75rem 0;
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .guide-header-inner {
+            max-width: var(--guide-max-width);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            text-decoration: none;
+            color: var(--pico-primary);
+            font-size: 0.95rem;
+            transition: transform 0.15s ease;
+        }
+
+        .back-link:hover {
+            transform: translateX(-2px);
+            text-decoration: underline;
+        }
+
+        .guide-header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-btn {
+            margin: 0 !important;
+            padding: 6px 12px !important;
+            font-size: 0.82rem !important;
+            font-weight: 600 !important;
+            cursor: pointer;
+            border-radius: 6px !important;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header-btn.copied {
+            background: #16a34a !important;
+            border-color: #16a34a !important;
+            color: #ffffff !important;
+        }
+
+        /* Main Content Container */
+        .guide-container {
+            max-width: var(--guide-max-width);
+            margin: 1.5rem auto 3rem auto;
+            padding: 0 1rem;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        .guide-card {
+            background-color: var(--pico-card-background-color);
+            border: 1px solid var(--pico-muted-border-color);
+            border-radius: 12px;
+            padding: 2.25rem 2rem;
+            box-shadow: var(--pico-card-box-shadow);
+        }
+
+        @media (max-width: 600px) {
+            .guide-card {
+                padding: 1.25rem 1rem;
+            }
+            .guide-header-inner {
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+            .back-link {
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Typography & Element Enhancements */
+        #readme-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--pico-muted-border-color);
+            margin: 1.25rem auto;
+            display: block;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        #readme-content table {
+            width: 100%;
+            margin: 1.5rem 0;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        #readme-content table th,
+        #readme-content table td {
+            padding: 8px 12px;
+            border: 1px solid var(--pico-muted-border-color);
+        }
+
+        #readme-content table th {
+            background-color: var(--pico-table-border-color);
+        }
+
+        #readme-content hr {
+            margin: 2rem 0;
+            border-color: var(--pico-muted-border-color);
+            opacity: 0.6;
+        }
+
+        /* Code Block with Header and Copy Button */
+        .code-container {
+            margin: 1.5rem 0;
+            border: 1px solid var(--pico-muted-border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: var(--pico-code-background-color, #1a1e24);
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 14px;
+            background-color: var(--pico-table-border-color);
+            border-bottom: 1px solid var(--pico-muted-border-color);
+            font-size: 0.8rem;
+        }
+
+        .code-title {
+            color: var(--pico-muted-color);
+            font-weight: 600;
+            font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+        }
+
+        .code-copy-btn {
+            margin: 0 !important;
+            padding: 4px 12px !important;
+            font-size: 0.78rem !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
+            cursor: pointer;
+            background: var(--pico-primary-background);
+            color: var(--pico-primary-inverse);
+            border: none;
+            transition: all 0.15s ease;
+        }
+
+        .code-copy-btn:hover {
+            filter: brightness(1.1);
+        }
+
+        .code-copy-btn.copied {
+            background: #16a34a !important;
+            color: #ffffff !important;
+        }
+
+        .code-container pre {
+            margin: 0;
+            padding: 14px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.45;
+            font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+        }
+
+        /* Loading Skeleton & Error State */
+        .loading-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--pico-muted-color);
+        }
+
+        .error-state {
+            text-align: center;
+            padding: 2.5rem 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Sticky Header -->
+    <header class="guide-header">
+        <div class="guide-header-inner">
+            <a href="../" class="back-link" title="Back to Meeting Time App">
+                <span>👈</span> <strong>Return to Meeting Board</strong>
+            </a>
+            <div class="guide-header-actions">
+                <button id="share-btn" class="secondary outline header-btn" onclick="copyShareLink(this)">
+                    🔗 Share Guide
+                </button>
+                <button id="theme-toggle-btn" class="secondary outline header-btn" onclick="toggleTheme()">
+                    ☀️ Light
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="guide-container">
+        <article class="guide-card">
+            <div id="readme-content">
+                <div class="loading-state">
+                    <p aria-busy="true">Loading User Guide...</p>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="container" style="max-width: var(--guide-max-width); text-align: center; padding-bottom: 2rem; font-size: 0.8rem; color: var(--pico-muted-color);">
+        <p>Troop 402 Meeting Time &bull; <a href="../" style="color: inherit;">Launch App</a> &bull; Single-source documentation from <code>README.md</code></p>
+    </footer>
+
+    <script>
+        const THEME_KEY = 'boardTheme_v2';
+
+        // 1. Theme Management (Synchronized with meeting board app)
+        function initTheme() {
+            const savedTheme = localStorage.getItem(THEME_KEY) || 'dark';
+            setTheme(savedTheme);
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem(THEME_KEY, theme);
+            const btn = document.getElementById('theme-toggle-btn');
+            if (btn) {
+                btn.textContent = theme === 'dark' ? '☀️ Light' : '🌓 Dark';
+            }
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme') || 'dark';
+            setTheme(current === 'dark' ? 'light' : 'dark');
+        }
+
+        // 2. Generic Clipboard Copy Helper with Visual Feedback
+        async function copyToClipboard(text, btn, defaultText, successText = '✅ Copied!') {
+            try {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    await navigator.clipboard.writeText(text);
+                } else {
+                    const ta = document.createElement('textarea');
+                    ta.value = text;
+                    ta.style.position = 'fixed';
+                    ta.style.opacity = '0';
+                    document.body.appendChild(ta);
+                    ta.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(ta);
+                }
+                if (btn) {
+                    btn.textContent = successText;
+                    btn.classList.add('copied');
+                    setTimeout(() => {
+                        btn.textContent = defaultText;
+                        btn.classList.remove('copied');
+                    }, 2200);
+                }
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                alert('Could not copy to clipboard. Please copy manually.');
+            }
+        }
+
+        // 3. Share Guide Button Action
+        function copyShareLink(btn) {
+            const url = window.location.href.split('#')[0];
+            copyToClipboard(url, btn, '🔗 Share Guide', '✅ Link Copied!');
+        }
+
+        // 4. Load & Render README.md dynamically
+        async function loadReadme() {
+            const container = document.getElementById('readme-content');
+            try {
+                const response = await fetch('../README.md');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status} ${response.statusText}`);
+                }
+                let md = await response.text();
+
+                // Rewrite relative image paths to point to ../screens/
+                md = md.replace(/\]\(\/?screens\//g, '](../screens/');
+                md = md.replace(/src=["']\/?screens\//g, (m) => m.startsWith('src="') ? 'src="../screens/' : "src='../screens/");
+                md = md.replace(/href=["']\/?screens\//g, (m) => m.startsWith('href="') ? 'href="../screens/' : "href='../screens/");
+
+                // Rewrite intra-readme anchor links (e.g., README.md#sample-agenda-text -> #sample-agenda-text)
+                md = md.replace(/README\.md#/g, '#');
+
+                // Rewrite app link so "Launch it Here" opens root ../
+                md = md.replace(/\(https:\/\/troop402\.github\.io\/meeting-time\/?\)/g, '(../)');
+
+                // Render Markdown to HTML via Marked.js
+                container.innerHTML = marked.parse(md);
+
+                // Add Slug IDs to all Headings for Anchor Jump Support
+                container.querySelectorAll('h1, h2, h3, h4, h5, h6').forEach(h => {
+                    if (!h.id) {
+                        h.id = h.textContent
+                            .toLowerCase()
+                            .trim()
+                            .replace(/[^\w\s-]/g, '')
+                            .replace(/[\s_-]+/g, '-')
+                            .replace(/^-+|-+$/g, '');
+                    }
+                });
+
+                // Attach Copy Buttons & Header Bars to Code Blocks
+                attachCodeEnhancements(container);
+
+                // If URL has a hash anchor (e.g. #sample-agenda-text), scroll to it
+                if (window.location.hash) {
+                    const hash = window.location.hash.substring(1);
+                    const target = document.getElementById(hash);
+                    if (target) {
+                        setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 100);
+                    }
+                }
+            } catch (err) {
+                container.innerHTML = `
+                    <div class="error-state">
+                        <h3>⚠️ Could not load User Guide</h3>
+                        <p style="color: var(--pico-muted-color);">Failed to fetch <code>README.md</code> (${err.message})</p>
+                        <button class="primary" onclick="loadReadme()">🔄 Retry</button>
+                    </div>
+                `;
+            }
+        }
+
+        // 5. Code Block Enhancement (Wrapper + Header + Copy Button)
+        function attachCodeEnhancements(container) {
+            const preElements = container.querySelectorAll('pre');
+            preElements.forEach((pre) => {
+                const code = pre.querySelector('code');
+                const rawText = code ? code.innerText : pre.innerText;
+
+                // Identify if this is the sample agenda text block
+                const isAgenda = rawText.includes('🦉') || rawText.includes('=== TABS ===') || rawText.includes('Meeting Set Up');
+                const titleText = isAgenda ? '📋 Sample Agenda Text' : '💻 Code / Text';
+                const buttonLabel = isAgenda ? '📋 Copy Agenda Text' : '📋 Copy Text';
+                const successLabel = isAgenda ? '✅ Agenda Copied!' : '✅ Copied!';
+
+                // Create wrapper container
+                const wrapper = document.createElement('div');
+                wrapper.className = 'code-container';
+
+                // Create header bar
+                const header = document.createElement('div');
+                header.className = 'code-header';
+
+                const title = document.createElement('span');
+                title.className = 'code-title';
+                title.textContent = titleText;
+
+                const copyBtn = document.createElement('button');
+                copyBtn.type = 'button';
+                copyBtn.className = 'code-copy-btn';
+                copyBtn.textContent = buttonLabel;
+                copyBtn.setAttribute('aria-label', `Copy ${titleText}`);
+                copyBtn.addEventListener('click', () => {
+                    copyToClipboard(rawText, copyBtn, buttonLabel, successLabel);
+                });
+
+                header.appendChild(title);
+                header.appendChild(copyBtn);
+
+                // Insert wrapper into DOM
+                pre.parentNode.insertBefore(wrapper, pre);
+                wrapper.appendChild(header);
+                wrapper.appendChild(pre);
+            });
+        }
+
+        // Initialize on DOM Ready
+        initTheme();
+        document.addEventListener('DOMContentLoaded', loadReadme);
+    </script>
+</body>
+</html>

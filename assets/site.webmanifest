@@ -1,8 +1,8 @@
 {
   "name": "Meeting",
   "short_name": "Meeting",
-  "start_url": "./",
-  "scope": "./",
+  "start_url": "../",
+  "scope": "../",
   "display": "fullscreen",
   "background_color": "#ffffff",
   "theme_color": "#ffffff",
