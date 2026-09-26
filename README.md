@@ -1,8 +1,8 @@
 # Meeting Time
 
-👉 **Launch it Here:** [https://troop402.github.io/meeting-time/](https://troop402.github.io/meeting-time/)
+👉 **Run it:** [https://troop402.github.io/meeting-time/](https://troop402.github.io/meeting-time/)
 
-A visual meeting timer and agenda display. Run as a website on a laptop, an app on a phone, or cast to a TV over WiFi hands-free. Easy to share and collaborate, no accounts or logins needed.
+A visual meeting timer and agenda display. Run as a website on a laptop, an app on a phone, or cast to a TV hands-free. Easy to share and collaborate, no login needed.
 
 ![Presentation screen for this app](/screens/presentation_video.webp)
 
@@ -12,8 +12,8 @@ A visual meeting timer and agenda display. Run as a website on a laptop, an app 
 
 The app has two stacked screens:
 
-- **Presentation View (Top Screen):** Main display shown to the room. It shows the current topic, live system clock, what's coming up next, and rotating announcements.
-- **Agenda Manager (Bottom Screen):** Scroll down to view the timeline, edit topics, manage announcements, and share the schedule.
+- **Presentation View (Top Screen):** Main display. View the current topic, clock, what's coming next, and rotating announcements.
+- **Agenda Management (Bottom Screen):** Scroll down to view the timeline, edit topics, and manage announcements.
 
 [![Management screen for this app](/screens/management_view_thumb.png)](/screens/management_view.png)
 
@@ -45,16 +45,16 @@ Keep a phone or laptop connected during the entire presentation. Enable Fullscre
 ### Fullscreen Methods
 
 - **iPhone / iPad (Safari):**
-  1. Open https://troop402.github.io/meeting-time/ in Safari.
+  1. Open [site](https://troop402.github.io/meeting-time/) in Safari.
   2. Tap the **Share** button (the square with an arrow pointing up).
   3. Scroll down and tap **Add to Home Screen**.
   4. Tap **Add** in the top right.
 - **Android (Chrome):**
-  1. Open https://troop402.github.io/meeting-time/ in Chrome.
+  1. Open [site](https://troop402.github.io/meeting-time/) in Chrome.
   2. Tap the three dots menu (top right).
   3. Tap **Install app** or **Add to Home screen**.
 - **Laptop (Chrome):**
-  1. Open https://troop402.github.io/meeting-time/
+  1. Open [site](https://troop402.github.io/meeting-time/)
   2. Use `[ 📺 Full ]` button to enter fullscreen mode
 
 ---
@@ -62,7 +62,7 @@ Keep a phone or laptop connected during the entire presentation. Enable Fullscre
 ## During the Meeting
 
 - The app monitors the real-world clock. When the time reaches the next scheduled item, the presentation advances.
-- Tap `[ ⏸ Pause ]`, `[ ◀ Prev ]`, `[ Next ▶ ]`, or click any item on the timeline to take manual control. Navigating will pause the display.
+- Tap `[ ⏸ Pause ]`, swipe lef and right, or click any item on the timeline to take manual control. Navigating will pause the display.
 - Press `[ ▶ Resume ]` to continue automated playback.
 
 ---
@@ -80,7 +80,7 @@ Keep a phone or laptop connected during the entire presentation. Enable Fullscre
 | `[ ↩ Undo ]` | Reverts the last edit or deletion. |
 | `[ Delete ]` | Removes the currently selected agenda item. |
 | `[ + Add ]` | Adds a new agenda topic. |
-| `[ > Resume ]` | Unpauses and syncs back to the live clock. |
+| `[ ▶ Resume ]` | Unpauses and syncs back to the live clock. |
 
 ---
 
@@ -91,9 +91,9 @@ Keep a phone or laptop connected during the entire presentation. Enable Fullscre
   - Type `--` for an indented sub-bullet.
   - Use `**bold**` or `*italics*` for emphasis.
 
-Use the `[ 📋 Import / Edit ]` feature to load an agenda. You can start with the sample agenda text below:
+Use `[ 📋 Import / Edit ]` to load an agenda. You can start with the sample agenda text below:
 
-(This 👉 [**link**](https://troop402.github.io/meeting-time/#agenda=nVbNbiPHEX6VL3NQJGAoSty1vWBOEndF2yFNQuRGCGwdijNFsjE93eP-IZcxDOSaR8gptzxYniCPEFTPjKTdBWJjLwSnu6rr56uqr37J6myc_fdf__4HVtwErjfsMHqVY3Q1-hoDPFhbYm2t9jjDnXKM26h0qcwuyzMVuPbZ-Mcfs2_GV1dYzrM8mzMHZXZYccD7JsuzAW5Wcz_Ge6NtUWFCG2VyLHXcQRksYiitdZip3T74HIuGDR6UKe3RD99a63yOWycP2hjgrNbyvyAnwlPHHGD4iIYcm-CHvrAx-J_MAGtnbYNpVCX7Mf7CTm1PqCmwU6Q9ttZhVSmtPb4zPrhYBGVN0uy_rfPjFEZs4EUUPlCSwrlYNjludWT5paK6ENWb1XLmx7i30ZR432CyJ63Z7BirVlWEWpkHpwKDjLHRFFyL97AGYc_YWHJlei7s2RCWFJzVY_zZ2NBe-hya_F5S4aluNPscq_W7OXZUs88ec0HkukNk6XjQo3JUYY_vZ5OEy2o5A5kSf51NUEsmrZEQd4xg4fig-JjORZF2bErqX_6qfVnAaivhM1_vNO0wYce1NacUtSCDBYV9sjmj4_PpqlIBAog1uxT3y6z8ZAYDLBO-__n7Pz26UASaBqNv0nUL9nO2l5qMePZCOBosioDXOV4NxP2kN7fRBMzIezbjdH99Nbge4XyldmYQG5RMpVaG28vRRdJa3GDhSibdqXw9uH6D8-_MQbUgwxp9akUntq6jUeGEFbuDKniMGW3pxCEw7tmzO1jlcN95d_2my_Coy_DU2di8rNAeuDEWB3ZGuuY52peVjDOslA_sOkiwdNxIcqdMDsWei8rGMMbE2kp0N_YD-wRNSLVomEsu_yAa920pNFQkSa18aAupSS97nEsLBq4bTYGlqzfKlOxSS6wCuYCaTUTT-5mUP_Kur9lXfc22Pt86JnEzRT11tOmDubW2yrGminETgpSmKRjnIToj9oPF3PlLrC9e-P9pVeHGV6CNFOA9mQr3_HNULl3jB-bS47xok5PDt-jl4FBcpkffN4WtJZhnHN4dRPUtB1KSlOi5nU0SdpsNKQizVa7uUgevdiY2Pk9Jl9caUjLtBL4yhhOclSy1xfpbOUxSUxc3NaXj6zFWFFAqMS_1EA02ktEt-fCp8KjtkSfhuf1UeLUnx2WS0tEU-z9BkpUIY28DSqdM5XOU7D27IBEER0rDGyqqHuCvrn6jsMEfGk3K-HbmemxYwg0UJcXBtqk-PwovBeGlHCFVW46t0NOmo6eLZPDNEy99Puwx6KeyT8Z_4GM_pZxi016N8WBdJZOxvUqVcoa1Dcr8EZO9antK6KB_DedrFoe21oaLMZa2qDigMmrL8LTlcMoRHFPCu4jhKYJhpYxMm91wG1mnCM_aoFq1S0yp5jHWLrKMyzvSni_FvvDQs_kVF9aUmGjy_mKMB6awZwc5VO1sEPaTh32XNM8hNjiDVbo9cOwbazz3Ju9ephZnySHwBwkhqkREnR9UVM-O3Cnnw5Mf78xBOWukv0i_jCtHNIU1UsOay96xFP_BX2JHftg75nuHJlQ3Xhh0T38jV8IXbMgpe9nBPupgvykP1Pd8Qvl72UZyTK0u2eAd7bTsBzLvYbdbDwqJgxMPtpQuy0sCv-sUaWF2bAp-khbXGk0Fd9b7MTbRTEb2h48K7Ubr9kGPPesGRS9VyG6UZnATA-hIp37leN5cOguvnyxYL5D0VPv7uHg56_jdf7KBnElPp2L0T_TchT1XJoY-wNcdP7XE228X7aB96uQ1U40z3JRRB8yY5NW9asYdXferRetJ9viYZ0GWyeuk__lkuyNdWIMh7rnEkkxJ6fhba_iEWyp37DDEPPpAaY0YYErBypmMrFumdoyuVaXkzNgjZmybdtca4NuT5GyIO_shfT-vgT3pDLE4dr4sjppTQb2gr6s8y_LsLYV2A0th_N-95QvXli_aWn7_0vIFO0uefcSt2ePjr_8D) will also load the exact same agenda text!)
+(This 👉 [**link**](https://troop402.github.io/meeting-time/#agenda=nVbNbiPHEX6VL3NQJGAoSty1vWBOEndF2yFNQuRGCGwdijNFsjE93eP-IZcxDOSaR8gptzxYniCPEFTPjKTdBWJjLwSnu6rr56uqr37J6myc_fdf__4HVtwErjfsMHqVY3Q1-hoDPFhbYm2t9jjDnXKM26h0qcwuyzMVuPbZ-Mcfs2_GV1dYzrM8mzMHZXZYccD7JsuzAW5Wcz_Ge6NtUWFCG2VyLHXcQRksYiitdZip3T74HIuGDR6UKe3RD99a63yOWycP2hjgrNbyvyAnwlPHHGD4iIYcm-CHvrAx-J_MAGtnbYNpVCX7Mf7CTm1PqCmwU6Q9ttZhVSmtPb4zPrhYBGVN0uy_rfPjFEZs4EUUPlCSwrlYNjludWT5paK6ENWb1XLmx7i30ZR432CyJ63Z7BirVlWEWpkHpwKDjLHRFFyL97AGYc_YWHJlei7s2RCWFJzVY_zZ2NBe-hya_F5S4aluNPscq_W7OXZUs88ec0HkukNk6XjQo3JUYY_vZ5OEy2o5A5kSf51NUEsmrZEQd4xg4fig-JjORZF2bErqX_6qfVnAaivhM1_vNO0wYce1NacUtSCDBYV9sjmj4_PpqlIBAog1uxT3y6z8ZAYDLBO-__n7Pz26UASaBqNv0nUL9nO2l5qMePZCOBosioDXOV4NxP2kN7fRBMzIezbjdH99Nbge4XyldmYQG5RMpVaG28vRRdJa3GDhSibdqXw9uH6D8-_MQbUgwxp9akUntq6jUeGEFbuDKniMGW3pxCEw7tmzO1jlcN95d_2my_Coy_DU2di8rNAeuDEWB3ZGuuY52peVjDOslA_sOkiwdNxIcqdMDsWei8rGMMbE2kp0N_YD-wRNSLVomEsu_yAa920pNFQkSa18aAupSS97nEsLBq4bTYGlqzfKlOxSS6wCuYCaTUTT-5mUP_Kur9lXfc22Pt86JnEzRT11tOmDubW2yrGminETgpSmKRjnIToj9oPF3PlLrC9e-P9pVeHGV6CNFOA9mQr3_HNULl3jB-bS47xok5PDt-jl4FBcpkffN4WtJZhnHN4dRPUtB1KSlOi5nU0SdpsNKQizVa7uUgevdiY2Pk9Jl9caUjLtBL4yhhOclSy1xfpbOUxSUxc3NaXj6zFWFFAqMS_1EA02ktEt-fCp8KjtkSfhuf1UeLUnx2WS0tEU-z9BkpUIY28DSqdM5XOU7D27IBEER0rDGyqqHuCvrn6jsMEfGk3K-HbmemxYwg0UJcXBtqk-PwovBeGlHCFVW46t0NOmo6eLZPDNEy99Puwx6KeyT8Z_4GM_pZxi016N8WBdJZOxvUqVcoa1Dcr8EZO9antK6KB_DedrFoe21oaLMZa2qDigMmrL8LTlcMoRHFPCu4jhKYJhpYxMm91wG1mnCM_aoFq1S0yp5jHWLrKMyzvSni_FvvDQs_kVF9aUmGjy_mKMB6awZwc5VO1sEPaTh32XNM8hNjiDVbo9cOwbazz3Ju9ephZnySHwBwkhqkREnR9UVM-O3Cnnw5Mf78xBOWukv0i_jCtHNIU1UsOay96xFP_BX2JHftg75nuHJlQ3Xhh0T38jV8IXbMgpe9nBPupgvykP1Pd8Qvl72UZyTK0u2eAd7bTsBzLvYbdbDwqJgxMPtpQuy0sCv-sUaWF2bAp-khbXGk0Fd9b7MTbRTEb2h48K7Ubr9kGPPesGRS9VyG6UZnATA-hIp37leN5cOguvnyxYL5D0VPv7uHg56_jdf7KBnElPp2L0T_TchT1XJoY-wNcdP7XE228X7aB96uQ1U40z3JRRB8yY5NW9asYdXferRetJ9viYZ0GWyeuk__lkuyNdWIMh7rnEkkxJ6fhba_iEWyp37DDEPPpAaY0YYErBypmMrFumdoyuVaXkzNgjZmybdtca4NuT5GyIO_shfT-vgT3pDLE4dr4sjppTQb2gr6s8y_LsLYV2A0th_N-95QvXli_aWn7_0vIFO0uefcSt2ePjr_8D) will also load the exact same agenda!)
 
 ```text
 🦉 September 23, 2026 - Wood Tools & Fire Building
